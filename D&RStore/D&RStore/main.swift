@@ -27,6 +27,23 @@ import Foundation
 
  */
 
+var banner = """
+██████╗    ██╗   ██████╗     ███████╗████████╗ ██████╗ ██████╗ ███████╗
+██╔══██╗   ██║   ██╔══██╗    ██╔════╝╚══██╔══╝██╔═══██╗██╔══██╗██╔════╝
+██║  ██║████████╗██████╔╝    ███████╗   ██║   ██║   ██║██████╔╝█████╗
+██║  ██║██╔═██╔═╝██╔══██╗    ╚════██║   ██║   ██║   ██║██╔══██╗██╔══╝
+██████╔╝██████║  ██║  ██║    ███████║   ██║   ╚██████╔╝██║  ██║███████╗
+╚═════╝ ╚═════╝  ╚═╝  ╚═╝    ╚══════╝   ╚═╝    ╚═════╝ ╚═╝  ╚═╝╚══════╝
+██████╗  ██████╗  ██████╗ ██╗  ██╗     █████╗ ███╗   ██╗██████╗     ███████╗██╗██╗     ███╗   ███╗
+██╔══██╗██╔═══██╗██╔═══██╗██║ ██╔╝    ██╔══██╗████╗  ██║██╔══██╗    ██╔════╝██║██║     ████╗ ████║
+██████╔╝██║   ██║██║   ██║█████╔╝     ███████║██╔██╗ ██║██║  ██║    █████╗  ██║██║     ██╔████╔██║
+██╔══██╗██║   ██║██║   ██║██╔═██╗     ██╔══██║██║╚██╗██║██║  ██║    ██╔══╝  ██║██║     ██║╚██╔╝██║
+██████╔╝╚██████╔╝╚██████╔╝██║  ██╗    ██║  ██║██║ ╚████║██████╔╝    ██║     ██║███████╗██║ ╚═╝ ██║
+╚═════╝  ╚═════╝  ╚═════╝ ╚═╝  ╚═╝    ╚═╝  ╚═╝╚═╝  ╚═══╝╚═════╝     ╚═╝     ╚═╝╚══════╝╚═╝     ╚═╝
+    
+
+"""
+
 
 
 
@@ -146,8 +163,8 @@ class adminUser : User{
 
 
 func getUserInfo()-> User{
-    print("Enter the username: ");let username = readLine()!
-    print("admin or user: ");let type = readLine()!
+    print("Enter the username: ",terminator: "");let username = readLine()!
+    print("admin or user: ",terminator: "");let type = readLine()!
     if(type == "admin"){
         return adminUser(type: type, username: username)
     }else{
@@ -227,7 +244,7 @@ class Store {
     }
 }
 
-
+/* MARK: Menu*/
 
 enum Menu: Int{
     case addProduct = 1
@@ -258,8 +275,8 @@ func main(store:Store){
     var isExit = false
     let user = getUserInfo()
     
+    print("Welcome, \(user.username) 🎉")
     while !isExit{
-        print("Welcome, \(user.username) 🎉")
         print("1. add new product")
         print("2. list products")
         print("3. search product")
@@ -308,14 +325,17 @@ func main(store:Store){
                     
                 case .searchProduct:
                     print("keyword: ", terminator: ""); let keyword = readLine()!
-                    print(store.searchProduct(word: keyword))
+                    var array = store.searchProduct(word: keyword)
+                    for product in array{
+                        print(product.title)
+                    }
                 case .printCart:
                     adminUser.showCart()
                     
                     
                 case .checkOut:
-                    var money = adminUser.totalAmount()
-                    // payment
+                    let money = adminUser.totalAmount()
+                    print("Total Amount 💵: \(money)")
                     
                     print("1. Credit Card")
                     print("2. Cash")
@@ -378,9 +398,9 @@ func main(store:Store){
                 case .printCart:
                     user.showCart()
                 case .checkOut:
-                    var money = user.totalAmount()
+                    let money = user.totalAmount()
                     // payment
-                    
+                    print("Total Amount 💵: \(money)")
                     print("1. Credit Card")
                     print("2. Cash")
                     print("3. Bitcoin")
@@ -413,7 +433,10 @@ func main(store:Store){
 }
     
     let store = Store()
-    store.products.append(Product(title: "Wong kar wai üzerine kısa bir film", year: 1999, price: 20.0, category: "new"))
-    //print(store.products[0].title)
+    store.products.append(Product(title: "kalem", year: 2022, price: 15, category: "other"))
+    store.products.append(Movie(title: "Eternity and a day", year: 1998, price: 30, category: "film",director: nil,minutes: nil))
+    store.products.append(Movie(title: "A Seperation", year: 2011, price: 25, category: "film",director: nil,minutes: nil))
+    store.products.append(Book(title: "The Words", year: 1963, price: 35, category: "book", author: "Sartre", pageNumber: nil))
+    print(banner)
     main(store: store)
 
